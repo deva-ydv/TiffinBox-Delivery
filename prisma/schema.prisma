@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String
+  phone         String?
+  role          Role           @default(CUSTOMER)
+  address       String?
+  refreshToken  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  orders        Order[]
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+model MealPlan {
+  id            String         @id @default(uuid())
+  name          String
+  description   String
+  pricePerDay   Float
+  isAvailable   Boolean        @default(true)
+  imageUrl      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  orders        Order[]
+  subscriptions Subscription[]
+
+  @@map("meal_plans")
+}
+
+model Subscription {
+  id           String             @id @default(uuid())
+  userId       String
+  mealPlanId   String
+  status       SubscriptionStatus @default(ACTIVE)
+  startDate    DateTime
+  endDate      DateTime?
+  deliveryDays DeliveryDay[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  orders       Order[]
+  mealPlan     MealPlan           @relation(fields: [mealPlanId], references: [id])
+  user         User               @relation(fields: [userId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model Order {
+  id              String       @id @default(uuid())
+  userId          String
+  subscriptionId  String
+  mealPlanId      String
+  status          OrderStatus  @default(PENDING)
+  deliveryDate    DateTime
+  deliveryAddress String
+  price           Float
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  mealPlan        MealPlan     @relation(fields: [mealPlanId], references: [id])
+  subscription    Subscription @relation(fields: [subscriptionId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+
+  @@unique([subscriptionId, deliveryDate])
+  @@map("orders")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum DeliveryDay {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
