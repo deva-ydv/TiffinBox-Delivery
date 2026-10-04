@@ -68,12 +68,12 @@ Server starts at `http://localhost:3000`
 
 ---
 
-## Seed Credentials
+<!-- ## Seed Credentials
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@tiffinbox.com | admin123 |
-| Customer | customer@test.com | customer123 |
+| Customer | customer@test.com | customer123 | -->
 
 ---
 
