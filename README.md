@@ -16,7 +16,7 @@ Built with **Node.js · Express · TypeScript · Prisma · PostgreSQL · Gemini 
 | ORM | Prisma |
 | Database | PostgreSQL |
 | Auth | JWT (Access + Refresh Tokens) |
-| Validation | Zod |
+| Validation | Zod | 
 | Logging | Winston |
 | Scheduling | node-cron |
 | AI | Google Gemini 1.5 Flash |
