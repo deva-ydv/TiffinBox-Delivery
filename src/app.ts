@@ -11,13 +11,15 @@ import aiRoutes from './modules/ai/ai.routes';
 import { startOrderGeneratorJob } from './jobs/orderGenerator';
 import { logger } from './utils/logger';
 import { env } from './config/env';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // ── Security & Parsing ────────────────────────────────────────────────────────
 app.use(helmet());
-app.use(cors());
 app.use(express.json());
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
