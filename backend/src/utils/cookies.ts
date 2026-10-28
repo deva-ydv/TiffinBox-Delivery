@@ -1,10 +1,11 @@
 import { CookieOptions, Response } from 'express';
 import { env } from '../config/env';
 
+const isProd = env.NODE_ENV === 'production';
 const baseOptions: CookieOptions = {
   httpOnly: true,
   secure: env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  sameSite: isProd ? 'none' : 'lax',
 };
 
 // Keep these in sync with JWT_ACCESS_EXPIRES_IN / JWT_REFRESH_EXPIRES_IN

@@ -14,6 +14,7 @@ import { env } from './config/env';
 import cookieParser from 'cookie-parser';
 
 const app = express();
+app.set('trust proxy', 1);
 
 // ── Security & Parsing ────────────────────────────────────────────────────────
 app.use(helmet());
