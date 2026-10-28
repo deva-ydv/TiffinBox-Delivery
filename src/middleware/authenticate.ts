@@ -15,7 +15,8 @@ export const authenticate = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    // const token = req.headers.authorization?.split(' ')[1];
+    const token = req.cookies?.accessToken;
     if (!token) return next(new ApiError(401, 'No token provided'));
 
     const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET) as {

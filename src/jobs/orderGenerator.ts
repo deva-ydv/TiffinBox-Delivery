@@ -68,6 +68,7 @@ export const generateDailyOrders = async () => {
 
 // Runs every day at 6:00 AM IST
 export const startOrderGeneratorJob = () => {
-  cron.schedule('0 6 * * *', generateDailyOrders, { timezone: 'Asia/Kolkata' });
-  logger.info('[OrderGenerator] Cron job scheduled — runs daily at 6:00 AM IST');
+  cron.schedule('10 8 * * *', generateDailyOrders,{ timezone: 'Asia/Kolkata' });
+  // cron.schedule('*/1 * * * *', generateDailyOrders,{ timezone: 'Asia/Kolkata' });
+  logger.info('[OrderGenerator] Cron job scheduled — runs daily at 8:00 AM IST');
 };

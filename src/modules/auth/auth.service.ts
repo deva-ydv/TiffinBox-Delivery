@@ -1,10 +1,13 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
+import type { StringValue } from 'ms';
 import { prisma } from '../../config/db';
 import { env } from '../../config/env';
 import { ApiError } from '../../utils/ApiError';
 import { RegisterInput, LoginInput } from './auth.schema';
 import { Role } from '@prisma/client';
+
 
 interface TokenPayload {
   id: string;
@@ -12,15 +15,40 @@ interface TokenPayload {
   email: string;
 }
 
+// const generateTokens = (payload: TokenPayload) => {
+//   const accessToken = jwt.sign(payload, env.JWT_ACCESS_SECRET, {
+//     expiresIn: env.JWT_ACCESS_EXPIRES_IN,
+//   });
+//   const refreshToken = jwt.sign(payload, env.JWT_REFRESH_SECRET, {
+//     expiresIn: env.JWT_REFRESH_EXPIRES_IN,
+//   });
+//   return { accessToken, refreshToken };
+// };
+
 const generateTokens = (payload: TokenPayload) => {
-  const accessToken = jwt.sign(payload, env.JWT_ACCESS_SECRET, {
-    expiresIn: env.JWT_ACCESS_EXPIRES_IN,
-  });
-  const refreshToken = jwt.sign(payload, env.JWT_REFRESH_SECRET, {
-    expiresIn: env.JWT_REFRESH_EXPIRES_IN,
-  });
+  const accessOptions: SignOptions = {
+    expiresIn: env.JWT_ACCESS_EXPIRES_IN as StringValue,
+  };
+
+  const refreshOptions: SignOptions = {
+    expiresIn: env.JWT_REFRESH_EXPIRES_IN as StringValue,
+  };
+
+  const accessToken = jwt.sign(
+    payload,
+    env.JWT_ACCESS_SECRET,
+    accessOptions,
+  );
+
+  const refreshToken = jwt.sign(
+    payload,
+    env.JWT_REFRESH_SECRET,
+    refreshOptions,
+  );
+
   return { accessToken, refreshToken };
 };
+
 
 export const register = async (data: RegisterInput) => {
   const exists = await prisma.user.findUnique({ where: { email: data.email } });
@@ -102,4 +130,16 @@ export const updateProfile = async (userId: string, data: { name?: string; phone
     data,
     select: { id: true, name: true, email: true, role: true, phone: true, address: true },
   });
+};
+
+export const logoutByToken = async (token: string) => {
+  try {
+    const decoded = jwt.verify(token, env.JWT_REFRESH_SECRET) as TokenPayload;
+    await prisma.user.updateMany({
+      where: { id: decoded.id, refreshToken: token },
+      data: { refreshToken: null },
+    });
+  } catch {
+    // invalid or expired token: nothing to revoke
+  }
 };

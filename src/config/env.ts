@@ -11,7 +11,8 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().default('1h'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   GEMINI_API_KEY: z.string().min(1),
-  GEMINI_MODEL: z.string().default('gemini-flash-latest'),
+  GEMINI_MODEL: z.string().default('gemini-3.8-flash'),
+  CLIENT_URL: z.string().url(),
 });
 
 const parsed = envSchema.safeParse(process.env);
