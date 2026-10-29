@@ -140,10 +140,6 @@ VITE_API_URL=http://localhost:3000/api/v1
 
 Because the frontend and API are on different domains, production cookies use `SameSite=None; Secure`, CORS allows the frontend origin with credentials, and Express runs with `trust proxy` enabled.
 
-## What I Learned
-
-<!-- TODO: 3-4 bullets in your own words, e.g. cross-site cookie auth, moving from MongoDB/Mongoose to Prisma + PostgreSQL, deploying a monorepo, scheduled jobs -->
-
 ## Author
 
 Built by [@deva-ydv](https://github.com/deva-ydv).
