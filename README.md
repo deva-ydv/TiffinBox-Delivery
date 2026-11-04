@@ -138,8 +138,6 @@ VITE_API_URL=http://localhost:3000/api/v1
 | Backend | Render | Root directory `backend`, build `npm install --include=dev && npx prisma generate && npm run build`, start `npm start` |
 | Database | Neon | Schema applied with `prisma db push` |
 
-Because the frontend and API are on different domains, production cookies use `SameSite=None; Secure`, CORS allows the frontend origin with credentials, and Express runs with `trust proxy` enabled.
-
 ## Author
 
 Built by [@deva-ydv](https://github.com/deva-ydv).
